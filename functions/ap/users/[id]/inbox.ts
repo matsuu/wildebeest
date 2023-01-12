@@ -40,7 +40,8 @@ export const onRequest: PagesFunction<Env, any> = async ({ params, request, env,
 		env.userKEK,
 		waitUntil,
 		env.ADMIN_EMAIL,
-		getVAPIDKeys(env)
+		getVAPIDKeys(env),
+		env.QUEUE
 	)
 }
 
@@ -53,7 +54,8 @@ export async function handleRequest(
 	userKEK: string,
 	waitUntil: (p: Promise<any>) => void,
 	adminEmail: string,
-	vapidKeys: JWK
+	vapidKeys: JWK,
+	queue: Queue
 ): Promise<Response> {
 	const handle = parseHandle(id)
 
@@ -67,7 +69,9 @@ export async function handleRequest(
 		return new Response('', { status: 404 })
 	}
 
-	await activityHandler.handle(domain, activity, db, userKEK, adminEmail, vapidKeys)
+	await queue.send(JSON.stringify(activity))
+
+	// await activityHandler.handle(domain, activity, db, userKEK, adminEmail, vapidKeys)
 
 	// Assuming we received new posts or a like, pregenerate the user's timelines
 	// and notifications.

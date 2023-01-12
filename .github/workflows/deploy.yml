@@ -1,8 +1,9 @@
 name: Deploy
 on:
   push:
-    branches:    
+    branches:
       - main
+      - sven/MOW-75
   repository_dispatch:
 jobs:
   deploy:

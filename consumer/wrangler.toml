@@ -1,0 +1,3 @@
+name = "wildebeest-consumer"
+compatibility_date = "2023-01-12"
+main = "./src/index.ts"
